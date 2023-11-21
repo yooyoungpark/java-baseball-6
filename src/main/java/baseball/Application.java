@@ -21,8 +21,12 @@ public class Application {
         System.out.print("숫자를 입력해주세요 : ");
         String[] inputNumber = Console.readLine().split("");
         int[] inputGuessNumber = new int[inputNumber.length];
-        for (int i = 0; i < inputNumber.length; i++) {
-            inputGuessNumber[i] = Integer.parseInt(inputNumber[i]);
+        try {
+            for (int i = 0; i < inputNumber.length; i++) {
+                inputGuessNumber[i] = Integer.parseInt(inputNumber[i]);
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("숫자만 입력해주세요.");
         }
         System.out.println(Arrays.toString(inputGuessNumber));
     }
