@@ -33,5 +33,10 @@ public class Application {
         if (inputGuessNumber.length != 3) {
             throw new IllegalArgumentException("3자리의 수를 입력해주세요.");
         }
+        for (int guessNumber : inputGuessNumber) {
+            if (guessNumber == 0) {
+                throw new IllegalArgumentException("1에서 9까지의 수를 입력해주세요.");
+            }
+        }
     }
 }
