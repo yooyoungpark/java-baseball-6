@@ -29,6 +29,9 @@ public class Application {
             throw new IllegalArgumentException("숫자만 입력해주세요.");
         }
         System.out.println(Arrays.toString(inputGuessNumber));
-    }
 
+        if (inputGuessNumber.length != 3) {
+            throw new IllegalArgumentException("3자리의 수를 입력해주세요.");
+        }
+    }
 }
