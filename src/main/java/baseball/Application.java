@@ -32,7 +32,7 @@ public class Application {
             playGame(restartComputer);
             restartGame();
         }
-        if (reStart == 2){
+        if (reStart == 2) {
             System.out.println("게임종료");
         }
     }
@@ -54,7 +54,6 @@ public class Application {
             }
             System.out.print(ballCount + "볼 ");
             System.out.println(strikeCount + "스트라이크");
-
             if (strikeCount == 3) {
                 System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
                 break;
@@ -81,6 +80,13 @@ public class Application {
         try {
             for (int i = 0; i < inputNum.length; i++) {
                 inputGuessNumbers[i] = Integer.parseInt(inputNum[i]);
+            }
+            for (int i = 0; i < inputGuessNumbers.length; i++) {
+                for (int j = i + 1; j < inputGuessNumbers.length; j++) {
+                    if ((inputGuessNumbers[i]) == (inputGuessNumbers[j])) {
+                        throw new IllegalArgumentException("중복된 수는 입력할 수 없습니다.");
+                    }
+                }
             }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("숫자만 입력해주세요.");
