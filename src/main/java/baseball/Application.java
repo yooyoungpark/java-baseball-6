@@ -26,14 +26,21 @@ public class Application {
 
     private static void restartGame() {
         System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
-        int reStart = Integer.parseInt(Console.readLine());
-        if (reStart == 1) {
-            List<Integer> restartComputer = computerNumber();
-            playGame(restartComputer);
-            restartGame();
-        }
-        if (reStart == 2) {
-            System.out.println("게임종료");
+        try {
+            int reStart = Integer.parseInt(Console.readLine());
+            if (reStart == 1) {
+                List<Integer> restartComputer = computerNumber();
+                playGame(restartComputer);
+                restartGame();
+            }
+            if (reStart == 2) {
+                System.out.println("게임종료");
+            }
+            if (reStart != 1 && reStart != 2){
+                throw new IllegalArgumentException("1이나 2 를 입력하세요.");
+            }
+        }catch (NumberFormatException e){
+            throw new IllegalArgumentException("숫자만 입력하세요.");
         }
     }
 
@@ -89,7 +96,7 @@ public class Application {
                 }
             }
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("숫자만 입력해주세요.");
+            throw new IllegalArgumentException("숫자만 입력하세요.");
         }
         return inputGuessNumbers;
     }
