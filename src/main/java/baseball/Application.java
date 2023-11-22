@@ -12,16 +12,6 @@ public class Application {
         List<Integer> computer = computerNumber();
         playGame(computer);
         restartGame();
-
-//        if (inputGuessNumbers.length != 3) {
-//            throw new IllegalArgumentException("3자리의 수를 입력해주세요.");
-//        }
-//        for (int guessNumber : inputGuessNumbers) {
-//            if (guessNumber == 0) {
-//                throw new IllegalArgumentException("1에서 9까지의 수를 입력해주세요.");
-//            }
-//        }
-
     }
 
     private static void restartGame() {
@@ -61,6 +51,9 @@ public class Application {
             }
             System.out.print(ballCount + "볼 ");
             System.out.println(strikeCount + "스트라이크");
+            if (strikeCount == 0 && ballCount == 0){
+                System.out.println("낫싱");
+            }
             if (strikeCount == 3) {
                 System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
                 break;
@@ -83,10 +76,18 @@ public class Application {
     private static int[] playerNumber() {
         System.out.print("숫자를 입력해주세요 : ");
         String[] inputNum = Console.readLine().split("");
+        if (inputNum.length != 3) {
+            throw new IllegalArgumentException("3자리의 수를 입력해주세요.");
+        }
         int[] inputGuessNumbers = new int[inputNum.length];
         try {
             for (int i = 0; i < inputNum.length; i++) {
                 inputGuessNumbers[i] = Integer.parseInt(inputNum[i]);
+            }
+            for (int guessNumber : inputGuessNumbers){
+                if (guessNumber == 0){
+                    throw new IllegalArgumentException("1에서 9까지의 수를 입력하세요.");
+                }
             }
             for (int i = 0; i < inputGuessNumbers.length; i++) {
                 for (int j = i + 1; j < inputGuessNumbers.length; j++) {
