@@ -19,24 +19,41 @@ public class Application {
         System.out.println(computer);
 
         System.out.print("숫자를 입력해주세요 : ");
-        String[] inputNumber = Console.readLine().split("");
-        int[] inputGuessNumber = new int[inputNumber.length];
+        String[] inputNum = Console.readLine().split("");
+        int[] inputGuessNumbers = new int[inputNum.length];
         try {
-            for (int i = 0; i < inputNumber.length; i++) {
-                inputGuessNumber[i] = Integer.parseInt(inputNumber[i]);
+            for (int i = 0; i < inputNum.length; i++) {
+                inputGuessNumbers[i] = Integer.parseInt(inputNum[i]);
             }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("숫자만 입력해주세요.");
         }
-        System.out.println(Arrays.toString(inputGuessNumber));
+        //System.out.println(Arrays.toString(inputGuessNumbers));
 
-        if (inputGuessNumber.length != 3) {
+        int strikeCount = 0;
+        int ballCount = 0;
+        for (int i = 0; i < 3; i++) {
+            if (computer.contains(inputGuessNumbers[i])) {
+                if (computer.get(i) == inputGuessNumbers[i]) {
+                    strikeCount += 1;
+                }
+                if (computer.get(i) != inputGuessNumbers[i]) {
+                    ballCount += 1;
+                }
+            }
+        }
+        System.out.println(strikeCount + "스트라이크");
+        System.out.println(ballCount + "볼");
+
+
+        if (inputGuessNumbers.length != 3) {
             throw new IllegalArgumentException("3자리의 수를 입력해주세요.");
         }
-        for (int guessNumber : inputGuessNumber) {
+        for (int guessNumber : inputGuessNumbers) {
             if (guessNumber == 0) {
                 throw new IllegalArgumentException("1에서 9까지의 수를 입력해주세요.");
             }
         }
+
     }
 }
