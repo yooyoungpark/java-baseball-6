@@ -1,62 +1,89 @@
 package baseball;
 
+import static baseball.Application.DIGIT_NUMBER;
+import static baseball.Application.GAME_RESTART_NUMBER;
+import static baseball.Application.GAME_OVER_NUMBER;
+import static baseball.Application.MIN_NUMBER;
+import static baseball.Application.MAX_NUMBER;
+
 import camp.nextstep.edu.missionutils.Console;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InputView {
-    public static final int DIGIT_NUMBER = 3;
-    public static final int GAME_RESTART_NUMBER = 1;
-    public static final int GAME_OVER_NUMBER = 2;
 
-    public static int[] playerNumber() {
-        System.out.print("숫자를 입력해주세요 : ");
-        String[] inputNum = Console.readLine().split("");
-        int[] inputGuessNumbers = new int[inputNum.length];
+    public static List<Integer> playerNumber() {
         try {
-            for (int i = 0; i < inputNum.length; i++) {
-                inputGuessNumbers[i] = Integer.parseInt(inputNum[i]);
-            }
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("숫자만 입력하세요.");
+            System.out.print("숫자를 입력해주세요 : ");
+            String[] inputNum = Console.readLine().split("");
+            List<Integer> inputGuessNumbers = createNumbers(inputNum);
+            checkNumberSize(inputGuessNumbers);
+            checkNumberRange(inputGuessNumbers);
+            checkDuplicated(inputGuessNumbers);
+            return inputGuessNumbers;
+        } catch (IllegalArgumentException e) {
+            OutputView.printError(e.getMessage());
+            return playerNumber();
         }
-        if (inputGuessNumbers.length != DIGIT_NUMBER) {
-            throw new IllegalArgumentException(DIGIT_NUMBER + "자리의 수를 입력해주세요.");
-        }
-        for (int guessNumber : inputGuessNumbers) {
-            if (guessNumber == 0) {
-                throw new IllegalArgumentException("1에서 9까지의 수를 입력하세요.");
-            }
-        }
-        for (int i = 0; i < inputGuessNumbers.length; i++) {
-            for (int j = i + 1; j < inputGuessNumbers.length; j++) {
-                if ((inputGuessNumbers[i]) == (inputGuessNumbers[j])) {
+    }
+
+    private static void checkDuplicated(List<Integer> inputGuessNumbers) {
+        for (int i = 0; i < inputGuessNumbers.size(); i++) {
+            for (int j = i + 1; j < inputGuessNumbers.size(); j++) {
+                if (inputGuessNumbers.get(i) == inputGuessNumbers.get(j)) {
                     throw new IllegalArgumentException("중복된 수는 입력할 수 없습니다.");
                 }
             }
         }
-        return inputGuessNumbers;
     }
 
-    public static void reStartOrCloseGame() {
-        System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
-        try {
-            int inputGameOverNumberOrGameRestartNumber = Integer.parseInt(Console.readLine());
-            reStartGame(inputGameOverNumberOrGameRestartNumber);
-            OutputView.closeGame(inputGameOverNumberOrGameRestartNumber);
-            if (inputGameOverNumberOrGameRestartNumber != GAME_RESTART_NUMBER
-                    && inputGameOverNumberOrGameRestartNumber != GAME_OVER_NUMBER) {
-                throw new IllegalArgumentException("1이나 2 를 입력하세요.");
+    private static void checkNumberRange(List<Integer> inputGuessNumbers) {
+        for (int number : inputGuessNumbers) {
+            if (number < MIN_NUMBER || number > MAX_NUMBER) {
+                throw new IllegalArgumentException(MIN_NUMBER + "에서 " + MAX_NUMBER + "까지의 수를 입력해 주세요.");
             }
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("숫자만 입력하세요.");
         }
     }
 
-    private static void reStartGame(int inputGameOverNumberOrGameRestartNumber) {
-        if (inputGameOverNumberOrGameRestartNumber == GAME_RESTART_NUMBER) {
-            List<Integer> restartComputer = Application.computerNumber();
-            Application.playGame(restartComputer);
-            reStartOrCloseGame();
+    private static void checkNumberSize(List<Integer> inputGuessNumbers) {
+        if (inputGuessNumbers.size() != DIGIT_NUMBER) {
+            throw new IllegalArgumentException(DIGIT_NUMBER + "자리 수를 입력해 주세요.");
+        }
+    }
+
+    public static List<Integer> createNumbers(String[] inputNum) {
+        try {
+            List<Integer> inputGuessNumbers = new ArrayList<>();
+            for (int i = 0; i < inputNum.length; i++) {
+                int toNumber = Integer.parseInt(inputNum[i]);
+                inputGuessNumbers.add(toNumber);
+            }
+            return inputGuessNumbers;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("숫자를 입력해 주세요.");
+        }
+    }
+
+    public static int reStartOrCloseGame() {
+        try {
+            System.out.println("게임을 새로 시작하려면 " + GAME_RESTART_NUMBER + "," + " 종료하려면 " + GAME_OVER_NUMBER + "를 입력하세요.");
+            int input = inputNumber();
+            if (input != GAME_RESTART_NUMBER && input != GAME_OVER_NUMBER) {
+                throw new IllegalArgumentException("1이나 2 를 입력해 주세요.");
+            }
+            return input;
+        } catch (IllegalArgumentException e) {
+            OutputView.printError(e.getMessage());
+            return reStartOrCloseGame();
+        }
+    }
+
+    private static int inputNumber() {
+        try {
+            String input = Console.readLine();
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("숫자만 입력해 주세요.");
         }
     }
 }
